@@ -226,7 +226,7 @@ module.exports = function (grunt) {
           join: true
         },
         files: {
-          'app/js/mainComponents.js': ['coffee/*.coffee']
+          'app/js/components.js': ['coffee/components/*.coffee']
         }
       }
     }
