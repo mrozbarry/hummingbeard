@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>hummingbeard</title>
+
+    <link rel="stylesheet" href="../css/main.css">
+
+    <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../js/foundation.min.js"></script>
+    <script type="text/javascript" src="../js/react-with-addons.js"></script>
+    <script type="text/javascript" src="../js/mainComponents.js"></script>
+    <script type="text/javascript" src="../js/index.js"></script>
+   </head>
+  <body>
+    <div class="fixed custom-nav clearfix">
+      <ul class="button-group left" id="mainNav">
+        <li><a class="button tiny secondary" href="#accounts">Accounts</a></li>
+        <li><a class="button tiny primary" href="#contacts">Contacts</a></li>
+        <li><a class="button tiny secondary" href="#settings">Settings</a></li>
+      </ul>
+      <a class="button tiny right alert" id="quit" href="#quit">Quit</a>
+    </div>
+    <div id="body">
+    </div>
+    <section class="hide" id="data">
+      <ol id="data-accounts">
+        <li data-account="some-guid-goes-here">
+          <dl>
+            <dt>variable_name</dt><dd>value</dd>
+          </dl>
+        </li>
+      </ol>
+    </section>
+  </body>
+</html>
