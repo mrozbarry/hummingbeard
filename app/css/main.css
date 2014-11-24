@@ -15,6 +15,10 @@ div.custom-nav {
   -webkit-app-region: drag;
 }
 
+div.custom-nav > ul {
+  width: auto;
+}
+
 a, button, input, textarea, .panel * {
   -webkit-app-region: no-drag;
 }
