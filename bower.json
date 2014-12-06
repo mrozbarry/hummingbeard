@@ -2,7 +2,8 @@
   "name": "package",
   "version": "0.0.0",
   "dependencies": {
-    "reflux": "0.1.15"
+    "reflux": "0.1.15",
+    "materialize": "v0.82"
   }
 }
 

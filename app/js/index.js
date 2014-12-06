@@ -337,7 +337,12 @@
       };
     },
     newMessage: function() {
-      return console.log("Contacts.newMessage");
+      return window.open("chat.html", {
+        width: 800,
+        height: 600,
+        frame: true,
+        toolbar: false
+      });
     },
     render: function() {
       return div({
@@ -410,13 +415,26 @@
 
   window.HummingbeardMainWindow = MainWindow;
 
+  window.HummingbeardActions = window.HummingbeardActions || {};
+
+  window.HummingbeardActions.Account = Reflux.createActions(['stateChange', 'statusChange', 'login', 'logout', 'contactStateChange', 'contactStatusChange']);
+
+  window.HummingbeardActions = window.HummingbeardActions || {};
+
+  window.HummingbeardActions.Ui = Reflux.createActions(['cardClickShort', 'cardClickLong']);
+
   $(document).ready(function() {
-    React.renderComponent(HummingbeardMainWindow({
-      navDom: document.getElementById("mainNav")
-    }), document.getElementById("body"));
-    return $("#quit").click(function(e) {
-      e.preventDefault();
-      return window.close();
+    $('ul.tabs').tabs();
+    return $('.card-content, .card-content *').mousedown(function(e) {
+      return $(this).data('mouse-down', Date.now());
+    }).mouseup(function(e) {
+      var total;
+      total = Date.now() - $(this).data('mouse-down');
+      if (total <= 150) {
+        return $(this).parent(".card").find(".card-footer a:first").trigger('click');
+      } else {
+        return $(this).parent(".card").children(".card-footer").toggle();
+      }
     });
   });
 

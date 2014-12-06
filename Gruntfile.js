@@ -8,6 +8,7 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.loadNpmTasks('grunt-contrib-coffee');
+  grunt.loadNpmTasks('grunt-contrib-sass');
 
   // configurable paths
   var config = {
@@ -229,6 +230,23 @@ module.exports = function (grunt) {
           'app/js/index.js': [ 'coffee/index/components/*.coffee', 'coffee/index/actions/*.coffee', 'coffee/index/data_stores/*.coffee', 'coffee/index/index.coffee']
         }
       }
+    },
+    sass: {
+      dist: {
+        options: {
+          style: 'compressed'
+        },
+        files: {
+          'app/css/materialize.css': 'bower_components/materialize/sass/materialize.scss'
+        }
+        /*[{
+          expand: true,
+          cwd: 'bower_components/materialize/sass',
+          src: 'materialize.scss',
+          dest: 'app/css',
+          ext: '.css'
+        }]*/
+      }
     }
   });
 
@@ -401,6 +419,6 @@ module.exports = function (grunt) {
     });
   });
 
-  grunt.registerTask('default', ['coffee'])
+  grunt.registerTask('default', ['coffee', 'sass'])
 
 };

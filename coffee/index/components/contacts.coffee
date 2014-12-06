@@ -82,7 +82,7 @@ Contacts = React.createClass
     { contacts: contacts }
 
   newMessage: ->
-    console.log "Contacts.newMessage"
+    window.open "chat.html", { width: 800, height: 600, frame: true, toolbar: false }
 
   render: ->
     div className: 'row with_button main_list',

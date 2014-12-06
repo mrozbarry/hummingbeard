@@ -4,15 +4,149 @@
     <title>hummingbeard</title>
 
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/materialize.css">
+    <link rel="stylesheet" src="../../bower_components/materialize/css/ghpages-materialize.css">
 
     <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="../js/foundation.min.js"></script>
     <script type="text/javascript" src="../../bower_components/reflux/dist/reflux.min.js"></script>
     <script type="text/javascript" src="../js/react-with-addons.js"></script>
+    <script type="text/javascript" src="../../bower_components/materialize/bin/materialize.js"></script>
     <script type="text/javascript" src="../js/index.js"></script>
+
+    <script type="text/javascript">
+      var nwb_gui = require('nw.gui');
+      var windows = [];
+      var quit = function() {
+        for(var i=0; i < windows.length; i++)
+          windows[i].close();
+        window.close();
+      }
+      var openDevTools = function() {
+        nwb_gui.Window.get(window).showDevTools();
+      }
+      var openChild = function(url, opts) {
+        var options = {
+          position: 'center',
+          show_in_taskbar: true,
+          min_width: 200,
+          min_height: 400,
+          frame: false,
+          toolbar: false
+        }
+        for( var opt in opts )
+          options[opt] = opts[opt]
+        wnd = nwb_gui.Window.open(url, options);
+        windows.push( wnd );
+        return wnd
+      }
+      $(document).ready(function(){
+     });
+    </script>
+
    </head>
   <body>
-    <div class="fixed custom-nav clearfix">
+
+    <div class="row">
+
+      <div class="col s12">
+        <ul class="tabs z-depth-1">
+          <li class="tab col s4"><a href="#conversations">Conversations</a></li>
+          <li class="tab col s3"><a href="#accounts">Accounts</a></li>
+          <li class="tab col s3"><a href="#settings">Settings</a></li>
+          <li class="tab col s2"><a href="#quit" onclick="quit();">Quit</a></li>
+        </ul>
+      </div>
+      <div id="conversations" style="display:block;" class="col s12">
+        <div class="row">
+          <div class="col s12">
+
+            <div class="card">
+              <div class="card-content">
+                <img src="http://placehold.it/512x128">
+                <h1>Dave, Dayton, and 7 others</h1>
+                <p>Google Hangouts</p>
+              </div>
+              <div class="card-footer" style="display:none;">
+                <p>mrozbarry@pairshaped.ca</p>
+                <div class="row">
+                  <div class="col s9">
+                    <a class="waves-effect waves-light btn open" href="#" onclick="openChild('chat.html', {width: 1024, height: 768});return false;">Open</a>
+                    <a class="waves-effect waves-light btn" href="#" onclick="return false;">Archive</a>
+                  </div>
+                  <div class="col s3">
+                    <input type="checkbox" id="chat-x-notifications" />
+                    <label for="chat-x-notifications">Notifications</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="row" class="margin-top: 50px;">
+          <div class="col s12" style="text-align:center;">
+            <a href="" class="btn-floating"><i class="mdi-content-add"></i></a>
+          </div>
+        </div>
+      </div>
+      <div id="accounts" class="col s12">
+        <div class="row">
+
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content">
+                <img src="http://placehold.it/512x128">
+                <h1>alex.barry@gmail.com</h1>
+                <p>Google Hangouts</p>
+              </div>
+              <div class="card-footer" style="display:none;">
+                <p>Status: <span>offline</span></p>
+                <div class="row">
+                  <div class="col s6">
+                    <a class="waves-effect waves-light btn" href="#">Edit</a>
+                  </div>
+                  <div class="col s6" style="text-align: right;">
+                    <input type="checkbox" id="account-1-enable" />
+                    <label for="account-1-enable">Enable Account</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content">
+                <img src="http://placehold.it/512x128">
+                <h1>mrozbarry@pairshaped.ca</h1>
+                <p>Google Hangouts</p>
+              </div>
+              <div class="card-footer" style="display:none;">
+                <p>Status: <span>offline</span></p>
+                <div class="row">
+                  <div class="col s6">
+                    <a class="waves-effect waves-light btn" href="#">Edit</a>
+                  </div>
+                  <div class="col s6" style="text-align: right;">
+                    <input type="checkbox" id="account-2-enable" />
+                    <label for="account-2-enable">Enable Account</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div id="settings" class="col s12">
+        <a href="#" class="btn" onclick="openDevTools();return false;">Dev Tools</a>
+      </div>
+
+    </div>
+
+
+    <!--<div class="fixed custom-nav clearfix">
       <ul class="button-group left" id="mainNav">
         <li><a class="button tiny primary" href="#contacts">Contacts</a></li>
         <li><a class="button tiny secondary" href="#accounts">Accounts</a></li>
@@ -20,7 +154,6 @@
       </ul>
       <a class="button tiny right alert" id="quit" href="#quit">Quit</a>
     </div>
-    <div id="body">
-    </div>
+    <div id="body"></div>-->
   </body>
 </html>
