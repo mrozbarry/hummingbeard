@@ -1,94 +1,42 @@
-{div, span, button, img, h3, input, label, br} = React.DOM
+{div, span, button, img, h1, input, label, i, p} = React.DOM
 
 
-AccountsDisplay = React.createClass
-
+AccountsItem = React.createClass
   getInitialState: ->
-    { selected: false }
+    hexValues = '0123456789ABCDEF'.split('')
+    color = '#'
+    [0..5].map (i) ->
+      color += hexValues[ Math.floor( Math.random() * hexValues.length ) ]
+    { color: color, footerDisplay: 'none' }
 
-  selectedChange: ->
-    @props.changeSelectedAccount @props.account, ($(@refs.selected.getDOMNode()).prop("checked") == true)
-
-  componentDidMount: ->
-    { panel, selected } = @refs
-    $myInput = $(selected.getDOMNode())
-    $panel = $(panel.getDOMNode())
-    $myInput.change (e) =>
-      @setState selected: $myInput.prop("checked")
-      @selectedChange() #if $myInput.prop("checked") == true
-
-    $panel.click (e) =>
-      $previous = $ "input[name='selectedAccount']:checked"
-      $myInput.prop("checked", !$myInput.prop("checked") )
-      $previous.trigger "change" unless $previous[0] == $myInput[0]
-      $myInput.trigger "change"
+  toggleFooter: ->
+    @setState footerDisplay: if @state.footerDisplay == 'block' then 'none' else 'block'
 
   render: ->
-    panel_class = 'panel'
-    panel_class = 'panel callout' if @state.selected == true
-    div className: 'small-12 columns',
-      input type: 'radio', name: 'selectedAccount', className: 'hide', ref: 'selected'
-      div className: panel_class, ref: 'panel',
-        div className: 'row',
-          div className: 'small-2 columns',
-            img src: 'http://placehold.it/64x64', alt: 'your profile picture'
-          div className: 'small-8 columns',
-            div className: 'row',
-              div className: 'small-12 columns',
-                h3 {}, @props.account.alias
-            div className: 'row',
-              div className: 'small-12 columns',
-                span {}, @props.account.protocol.join " / "
-          div className: 'small-2 columns',
-            br {}
-            div className: 'switch large right round',
-              input id: "account-#{@props.key}-active", type: 'checkbox'
-              label htmlFor: "account-#{@props.key}-active"
+    div className: 'card',
+      div className: 'card-content', style: { background: @state.color }, onClick: @toggleFooter,
+        #img src: 'http://placehold.it/512x128', alt: 'account-cover-image'
+        span className: 'card-title', @props.account.username
+        p {}, @props.account.protocol
+      div className: 'card-footer', style: { display: @state.footerDisplay },
+        p {},
+          'Status: '
+          span {}, @props.account.status
+          div className: 'row',
+            div className: 's6 col',
+              button className: 'waves-effect waves-light btn', 'Edit'
+            div className: 's6 col', style: { 'text-align': 'right' },
+              input type: 'checkbox', id: "account-#{@props.account.guid}-enabled"
+              label htmlFor: "account-#{@props.account.guid}-enabled", 'Enable Account'
 
-AccountsAction = React.createClass
-  doAction: (e) ->
-    e.preventDefault()
-
+AccountsBox = React.createClass
   render: ->
-    button className: 'button action primary text-centered', onClick: @props.action,
-      span className: "fa fa-#{@props.button.icon}"
-      " #{@props.button.text}"
+    div className: 'row',
+      div className: 's12 col',
+        [0..5].map (i) ->
+          AccountsItem key: i, account: { guid: "0000-ABCD-000#{i}", username: 'alex.barry@gmail.com', protocol: 'Google Hangouts' }
+      div className: 's12 col', style: { 'text-align': 'center', 'font-size': '1.5em' },
+        a href: '', className: 'btn-floating', title: 'Add Account',
+          i className: 'mdi-content-add'
 
-
-Accounts = React.createClass
-  getInitialState: ->
-    account_types = [ ["jabber", "Google Hangouts", "@gmail.com"], ["jabber", "Hipchat", ""], ["irc", "Internet Relay Chat", ""] ]
-    account_names = [ "DeepRoy_xXx", "master_cheif_94", "sohawtritenow", "sorrowman", "thATGuy", "Alex", "James" ]
-    accounts = []
-    for i in [0..10]
-      type_idx = Math.floor Math.random() * account_types.length
-      type = account_types[ type_idx ]
-      name_idx = Math.floor Math.random() * account_names.length
-      name = account_names[ name_idx ]
-      accounts.push { alias: name, name: name + type[2], protocol: [ type[0], type[1] ] }
-
-    { accounts: accounts, selectedAccount: null }
-
-  showPage: (url) ->
-    console.log "Open page", url
-
-  changeSelectedAccount: ( account, isSelected ) ->
-    acc = account
-    acc = null unless isSelected == true
-    console.log "Accounts::changeSelectedAccount", acc
-    @setState selectedAccount: acc
-
-  render: ->
-    div className: 'row with_button main_list',
-      @state.accounts.map (account, index) =>
-        AccountsDisplay key: index, account: account, changeSelectedAccount: @changeSelectedAccount
-      if @state.selectedAccount?
-        AccountsAction button: { icon: 'edit', text: 'Modify Account' }, action: (e) =>
-          e.preventDefault()
-          @showPage("views/wizard.html?account=x")
-      else
-        AccountsAction button: { icon: 'plus', text: 'Add Account' }, action: (e) =>
-          e.preventDefault()
-          @showPage("views/wizard.html")
-
-window.HummingbeardAccounts = Accounts
+window.HummingbeardAccounts = AccountsBox

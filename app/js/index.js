@@ -1,205 +1,177 @@
 (function() {
-  var Accounts, AccountsAction, AccountsDisplay, ContactDisplay, Contacts, ConversationSearch, MainWindow, a, br, button, div, fieldset, h3, img, input, label, span, _ref, _ref1, _ref2,
+  var AccountsBox, AccountsItem, ContactItem, ContactsBox, ContactsSearch, MainWindow, a, br, button, div, h1, i, img, input, label, p, span, _ref, _ref1, _ref2,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  _ref = React.DOM, div = _ref.div, span = _ref.span, button = _ref.button, img = _ref.img, h3 = _ref.h3, input = _ref.input, label = _ref.label, br = _ref.br;
+  _ref = React.DOM, div = _ref.div, span = _ref.span, button = _ref.button, img = _ref.img, h1 = _ref.h1, input = _ref.input, label = _ref.label, i = _ref.i, p = _ref.p;
 
-  AccountsDisplay = React.createClass({
+  AccountsItem = React.createClass({
     getInitialState: function() {
+      var color, hexValues;
+      hexValues = '0123456789ABCDEF'.split('');
+      color = '#';
+      [0, 1, 2, 3, 4, 5].map(function(i) {
+        return color += hexValues[Math.floor(Math.random() * hexValues.length)];
+      });
       return {
-        selected: false
+        color: color,
+        footerDisplay: 'none'
       };
     },
-    selectedChange: function() {
-      return this.props.changeSelectedAccount(this.props.account, $(this.refs.selected.getDOMNode()).prop("checked") === true);
-    },
-    componentDidMount: function() {
-      var $myInput, $panel, panel, selected, _ref1;
-      _ref1 = this.refs, panel = _ref1.panel, selected = _ref1.selected;
-      $myInput = $(selected.getDOMNode());
-      $panel = $(panel.getDOMNode());
-      $myInput.change((function(_this) {
-        return function(e) {
-          _this.setState({
-            selected: $myInput.prop("checked")
-          });
-          return _this.selectedChange();
-        };
-      })(this));
-      return $panel.click((function(_this) {
-        return function(e) {
-          var $previous;
-          $previous = $("input[name='selectedAccount']:checked");
-          $myInput.prop("checked", !$myInput.prop("checked"));
-          if ($previous[0] !== $myInput[0]) {
-            $previous.trigger("change");
-          }
-          return $myInput.trigger("change");
-        };
-      })(this));
-    },
-    render: function() {
-      var panel_class;
-      panel_class = 'panel';
-      if (this.state.selected === true) {
-        panel_class = 'panel callout';
-      }
-      return div({
-        className: 'small-12 columns'
-      }, input({
-        type: 'radio',
-        name: 'selectedAccount',
-        className: 'hide',
-        ref: 'selected'
-      }), div({
-        className: panel_class,
-        ref: 'panel'
-      }, div({
-        className: 'row'
-      }, div({
-        className: 'small-2 columns'
-      }, img({
-        src: 'http://placehold.it/64x64',
-        alt: 'your profile picture'
-      })), div({
-        className: 'small-8 columns'
-      }, div({
-        className: 'row'
-      }, div({
-        className: 'small-12 columns'
-      }, h3({}, this.props.account.alias))), div({
-        className: 'row'
-      }, div({
-        className: 'small-12 columns'
-      }, span({}, this.props.account.protocol.join(" / "))))), div({
-        className: 'small-2 columns'
-      }, br({}), div({
-        className: 'switch large right round'
-      }, input({
-        id: "account-" + this.props.key + "-active",
-        type: 'checkbox'
-      }), label({
-        htmlFor: "account-" + this.props.key + "-active"
-      }))))));
-    }
-  });
-
-  AccountsAction = React.createClass({
-    doAction: function(e) {
-      return e.preventDefault();
-    },
-    render: function() {
-      return button({
-        className: 'button action primary text-centered',
-        onClick: this.props.action
-      }, span({
-        className: "fa fa-" + this.props.button.icon
-      }), " " + this.props.button.text);
-    }
-  });
-
-  Accounts = React.createClass({
-    getInitialState: function() {
-      var account_names, account_types, accounts, i, name, name_idx, type, type_idx, _i;
-      account_types = [["jabber", "Google Hangouts", "@gmail.com"], ["jabber", "Hipchat", ""], ["irc", "Internet Relay Chat", ""]];
-      account_names = ["DeepRoy_xXx", "master_cheif_94", "sohawtritenow", "sorrowman", "thATGuy", "Alex", "James"];
-      accounts = [];
-      for (i = _i = 0; _i <= 10; i = ++_i) {
-        type_idx = Math.floor(Math.random() * account_types.length);
-        type = account_types[type_idx];
-        name_idx = Math.floor(Math.random() * account_names.length);
-        name = account_names[name_idx];
-        accounts.push({
-          alias: name,
-          name: name + type[2],
-          protocol: [type[0], type[1]]
-        });
-      }
-      return {
-        accounts: accounts,
-        selectedAccount: null
-      };
-    },
-    showPage: function(url) {
-      return console.log("Open page", url);
-    },
-    changeSelectedAccount: function(account, isSelected) {
-      var acc;
-      acc = account;
-      if (isSelected !== true) {
-        acc = null;
-      }
-      console.log("Accounts::changeSelectedAccount", acc);
+    toggleFooter: function() {
       return this.setState({
-        selectedAccount: acc
+        footerDisplay: this.state.footerDisplay === 'block' ? 'none' : 'block'
       });
     },
     render: function() {
       return div({
-        className: 'row with_button main_list'
-      }, this.state.accounts.map((function(_this) {
-        return function(account, index) {
-          return AccountsDisplay({
-            key: index,
-            account: account,
-            changeSelectedAccount: _this.changeSelectedAccount
-          });
-        };
-      })(this)), this.state.selectedAccount != null ? AccountsAction({
-        button: {
-          icon: 'edit',
-          text: 'Modify Account'
+        className: 'card'
+      }, div({
+        className: 'card-content',
+        style: {
+          background: this.state.color
         },
-        action: (function(_this) {
-          return function(e) {
-            e.preventDefault();
-            return _this.showPage("views/wizard.html?account=x");
-          };
-        })(this)
-      }) : AccountsAction({
-        button: {
-          icon: 'plus',
-          text: 'Add Account'
-        },
-        action: (function(_this) {
-          return function(e) {
-            e.preventDefault();
-            return _this.showPage("views/wizard.html");
-          };
-        })(this)
-      }));
+        onClick: this.toggleFooter
+      }, span({
+        className: 'card-title'
+      }, this.props.account.username), p({}, this.props.account.protocol)), div({
+        className: 'card-footer',
+        style: {
+          display: this.state.footerDisplay
+        }
+      }, p({}, 'Status: ', span({}, this.props.account.status), div({
+        className: 'row'
+      }, div({
+        className: 's6 col'
+      }, button({
+        className: 'waves-effect waves-light btn'
+      }, 'Edit')), div({
+        className: 's6 col',
+        style: {
+          'text-align': 'right'
+        }
+      }, input({
+        type: 'checkbox',
+        id: "account-" + this.props.account.guid + "-enabled"
+      }), label({
+        htmlFor: "account-" + this.props.account.guid + "-enabled"
+      }, 'Enable Account'))))));
     }
   });
 
-  window.HummingbeardAccounts = Accounts;
+  AccountsBox = React.createClass({
+    render: function() {
+      return div({
+        className: 'row'
+      }, div({
+        className: 's12 col'
+      }, [0, 1, 2, 3, 4, 5].map(function(i) {
+        return AccountsItem({
+          key: i,
+          account: {
+            guid: "0000-ABCD-000" + i,
+            username: 'alex.barry@gmail.com',
+            protocol: 'Google Hangouts'
+          }
+        });
+      })), div({
+        className: 's12 col',
+        style: {
+          'text-align': 'center',
+          'font-size': '1.5em'
+        }
+      }, a({
+        href: '',
+        className: 'btn-floating',
+        title: 'Add Account'
+      }, i({
+        className: 'mdi-content-add'
+      }))));
+    }
+  });
 
-  _ref1 = React.DOM, div = _ref1.div, span = _ref1.span, button = _ref1.button, img = _ref1.img, h3 = _ref1.h3, input = _ref1.input, label = _ref1.label, br = _ref1.br, fieldset = _ref1.fieldset;
+  window.HummingbeardAccounts = AccountsBox;
 
-  ConversationSearch = React.createClass({
-    showOptionFields: function() {
-      return $(this.refs.optionFields.getDOMNode()).removeClass("hide").addClass("show");
+  _ref1 = React.DOM, div = _ref1.div, span = _ref1.span, button = _ref1.button, img = _ref1.img, h1 = _ref1.h1, input = _ref1.input, label = _ref1.label, i = _ref1.i, p = _ref1.p, br = _ref1.br;
+
+  ContactItem = React.createClass({
+    getInitialState: function() {
+      var color, hexValues;
+      hexValues = '0123456789ABCDEF'.split('');
+      color = '#';
+      [0, 1, 2, 3, 4, 5].map(function(i) {
+        return color += hexValues[Math.floor(Math.random() * hexValues.length)];
+      });
+      return {
+        color: color,
+        footerDisplay: 'none'
+      };
     },
-    hideOptionFields: function() {
-      return $(this.refs.optionFields.getDOMNode()).removeClass("show").addClass("hide");
-    },
-    componentDidMount: function() {
-      $("*", this.refs.panel.getDOMNode()).blur(this.hideOptionFields);
-      return $("*", this.refs.panel.getDOMNode()).focus(this.showOptionFields);
+    toggleFooter: function() {
+      return this.setState({
+        footerDisplay: this.state.footerDisplay === 'block' ? 'none' : 'block'
+      });
     },
     render: function() {
       return div({
-        className: 'small-12 columns'
+        className: 'card'
       }, div({
-        className: 'panel',
-        ref: 'panel'
-      }, label({}, input({
-        className: 'radius',
+        className: 'card-content',
+        style: {
+          background: this.state.color
+        },
+        onClick: this.toggleFooter
+      }, span({
+        className: 'card-title'
+      }, this.props.contact.username), p({}, this.props.contact.status), p({}, this.props.contact.account.protocol)), div({
+        className: 'card-footer',
+        style: {
+          display: this.state.footerDisplay
+        }
+      }, p({}, div({
+        className: 'row'
+      }, div({
+        className: 's6 col'
+      }, button({
+        className: 'waves-effect waves-light btn'
+      }, 'Edit')), div({
+        className: 's6 col',
+        style: {
+          'text-align': 'right'
+        }
+      }, input({
+        type: 'checkbox',
+        id: "contact-" + this.props.contact.guid + "-enabled"
+      }), label({
+        htmlFor: "contact-" + this.props.contact.guid + "-enabled"
+      }, 'Enable Account'))))));
+    }
+  });
+
+  ContactsSearch = React.createClass({
+    displayOptions: function(e) {
+      var container;
+      e.preventDefault();
+      container = this.refs.moreOptions.getDOMNode();
+      return container.style.display = container.style.display === 'none' ? 'block' : 'none';
+    },
+    render: function() {
+      return div({
+        className: 's12 cols'
+      }, div({
+        className: 'card z-depth-2'
+      }, div({
+        className: 'card-content'
+      }, span({
+        className: 'card-title black-text'
+      }, 'Find Contact'), p({}, input({
         type: 'text',
         placeholder: 'Search Conversations',
         ref: 'input'
-      })), div({
-        ref: 'optionFields',
-        className: 'hide'
+      }), div({
+        style: {
+          display: 'none'
+        },
+        ref: 'moreOptions'
       }, input({
         id: 'show_online_only',
         type: 'checkbox'
@@ -210,158 +182,53 @@
         type: 'checkbox'
       }), label({
         htmlFor: 'hide_archived'
-      }, "Hide archived conversations"))));
+      }, "Hide archived conversations")))), div({
+        className: 'card-action'
+      }, a({
+        href: '',
+        onClick: this.displayOptions,
+        ref: 'displayOptions'
+      }, 'More options...'))));
     }
   });
 
-  ContactDisplay = React.createClass({
-    render: function() {
-      var avatar_column, c_size, extra, other, panel_class, title;
-      title = this.props.contact.buddies[0].name;
-      if (this.props.contact.buddies.length === 2) {
-        title = this.props.contact.buddies.map(function(buddy) {
-          return buddy.short_name;
-        }).join(" and ");
-      } else if (this.props.contact.buddies.length > 2) {
-        other = 'others';
-        extra = this.props.contact.buddies.length - 2;
-        if (extra === 1) {
-          other = 'other';
-        }
-        title = this.props.contact.buddies.slice(0, 2).map(function(buddy) {
-          return buddy.short_name;
-        }).join(", ") + (", and " + extra + " " + other);
-      }
-      panel_class = 'panel';
-      c_size = Math.ceil(12 / this.props.contact.buddies.length);
-      avatar_column = 'small-#{c_size}';
-      return div({
-        className: 'small-12 columns'
-      }, input({
-        type: 'radio',
-        name: 'selectedAccount',
-        className: 'hide',
-        ref: 'selected'
-      }), div({
-        className: panel_class,
-        ref: 'panel'
-      }, div({
-        className: 'row'
-      }, div({
-        className: 'small-2 columns'
-      }, img({
-        src: this.props.contact.buddies[0].avatar,
-        alt: 'profile picture'
-      })), div({
-        className: 'small-8 columns'
-      }, div({
-        className: 'row'
-      }, div({
-        className: 'small-12 columns'
-      }, h3({}, title)), div({
-        className: 'small-12 columns'
-      }, span({}, "Last message dd-mm-yyyy")), div({
-        className: 'small-12 columns'
-      }, span({}, this.props.contact.account.protocol[0] + (" / " + this.props.contact.account.alias))))), div({
-        className: 'small-2 columns'
-      }, br({}), div({
-        className: 'right'
-      }, input({
-        type: 'checkbox'
-      }))))));
-    }
-  });
-
-  Contacts = React.createClass({
-    getInitialState: function() {
-      var buddy_lists, buddy_names, contacts, conversation, i, j, participants, _i, _j;
-      buddy_names = [
-        {
-          name: "Alex Barry",
-          short_name: "Alex",
-          username: "alex@mrbarry.com",
-          avatar: "http://placehold.it/128x128"
-        }, {
-          name: "Bob Belcher",
-          short_name: "Bob",
-          username: "bob@mrbarry.com",
-          avatar: "http://placehold.it/128x128"
-        }, {
-          name: "Hank Hill",
-          short_name: "Hank",
-          username: "hank@mrbarry.com",
-          avatar: "http://placehold.it/128x128"
-        }, {
-          name: "Peter Parker",
-          short_name: "Peter",
-          username: "peter@mrbarry.com",
-          avatar: "http://placehold.it/128x128"
-        }, {
-          name: "Churck Norris",
-          short_name: "Chuck",
-          username: "chuck@mrbarry.com",
-          avatar: "http://placehold.it/128x128"
-        }, {
-          name: "Eric Cartman",
-          short_name: "Eric",
-          username: "eric@mrbarry.com",
-          avatar: "http://placehold.it/128x128"
-        }
-      ];
-      buddy_lists = [
-        {
-          alias: "Personal",
-          username: "alex+personal@mrbarry.com",
-          protocol: ["Google Hangouts", "Jabber"]
-        }, {
-          alias: "Work",
-          username: "alex+work@mrbarry.com",
-          protocol: ["Google Hangouts", "Jabber"]
-        }
-      ];
-      contacts = [];
-      for (i = _i = 0; _i <= 4; i = ++_i) {
-        conversation = {
-          buddies: [],
-          account: null
-        };
-        participants = Math.floor(Math.random() * buddy_names.length);
-        for (j = _j = 0; 0 <= participants ? _j <= participants : _j >= participants; j = 0 <= participants ? ++_j : --_j) {
-          conversation.buddies.push(buddy_names[Math.floor(Math.random() * buddy_names.length)]);
-        }
-        conversation.account = buddy_lists[Math.floor(Math.random() * buddy_lists.length)];
-        contacts.push(conversation);
-      }
-      return {
-        contacts: contacts
-      };
-    },
-    newMessage: function() {
-      return window.open("chat.html", {
-        width: 800,
-        height: 600,
-        frame: true,
-        toolbar: false
-      });
-    },
+  ContactsBox = React.createClass({
     render: function() {
       return div({
-        className: 'row with_button main_list'
-      }, ConversationSearch(), this.state.contacts.map(function(contact, idx) {
-        return ContactDisplay({
-          key: idx,
-          contact: contact
+        className: 'row'
+      }, div({
+        className: 's12 col'
+      }, ContactsSearch({})), div({
+        className: 's12 col'
+      }, [0, 1, 2, 3, 4, 5].map(function(i) {
+        return ContactItem({
+          key: i,
+          contact: {
+            guid: "0000-ABCD-000" + i,
+            username: 'alex.barry@gmail.com',
+            status: 'Online',
+            account: {
+              protocol: 'Google Hangouts'
+            }
+          }
         });
-      }), button({
-        className: 'button action primary text-centered',
-        onClick: this.newMessage
-      }, span({
-        className: 'fa fa-plus'
-      }), " New Message"));
+      })), div({
+        className: 's12 col',
+        style: {
+          'text-align': 'center',
+          'font-size': '1.5em'
+        }
+      }, a({
+        href: '',
+        className: 'btn-floating',
+        title: 'Add Account'
+      }, i({
+        className: 'mdi-social-person-add'
+      }))));
     }
   });
 
-  window.HummingbeardContacts = Contacts;
+  window.HummingbeardContacts = ContactsBox;
 
   _ref2 = React.DOM, div = _ref2.div, span = _ref2.span, a = _ref2.a;
 
@@ -421,9 +288,10 @@
 
   window.HummingbeardActions = window.HummingbeardActions || {};
 
-  window.HummingbeardActions.Ui = Reflux.createActions(['cardClickShort', 'cardClickLong']);
+  window.HummingbeardActions.Ui = Reflux.createActions(['tabChanged', 'cardClickShort', 'cardClickLong']);
 
   $(document).ready(function() {
+    React.renderComponent(HummingbeardContacts(), document.getElementById('contacts'));
     $('ul.tabs').tabs();
     return $('.card-content, .card-content *').mousedown(function(e) {
       return $(this).data('mouse-down', Date.now());

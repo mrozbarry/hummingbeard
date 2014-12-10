@@ -4,6 +4,8 @@ $(document).ready ->
   #  HummingbeardMainWindow( navDom: document.getElementById("mainNav") ),
   #  document.getElementById("body")
   #)
+  #React.renderComponent HummingbeardAccounts(), document.getElementById('accounts')
+  React.renderComponent HummingbeardContacts(), document.getElementById('contacts')
 
   $('ul.tabs').tabs()
   $('.card-content, .card-content *').mousedown((e) ->

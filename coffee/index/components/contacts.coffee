@@ -1,96 +1,67 @@
-{div, span, button, img, h3, input, label, br, fieldset} = React.DOM
-
-ConversationSearch = React.createClass
-  showOptionFields: ->
-    $(@refs.optionFields.getDOMNode()).removeClass("hide").addClass("show")
-
-  hideOptionFields: ->
-    $(@refs.optionFields.getDOMNode()).removeClass("show").addClass("hide")
-
-  componentDidMount: ->
-    $("*", @refs.panel.getDOMNode()).blur(@hideOptionFields)
-    $("*", @refs.panel.getDOMNode()).focus(@showOptionFields)
-
-  render: ->
-    div className: 'small-12 columns',
-      div className: 'panel', ref: 'panel',
-        label {},
-          input className: 'radius', type: 'text', placeholder: 'Search Conversations', ref: 'input'
-        div ref: 'optionFields', className: 'hide',
-          input id: 'show_online_only', type: 'checkbox'
-          label htmlFor: 'show_online_only', "Show online accounts only"
-          br {}
-          input id: 'hide_archived', type: 'checkbox'
-          label htmlFor: 'hide_archived', "Hide archived conversations"
+{div, span, button, img, h1, input, label, i, p, br} = React.DOM
 
 
-ContactDisplay = React.createClass
-  render: ->
-    title = @props.contact.buddies[0].name
-    if @props.contact.buddies.length == 2
-      title = @props.contact.buddies.map( (buddy) -> buddy.short_name ).join " and "
-    else if @props.contact.buddies.length > 2
-      other = 'others'
-      extra = @props.contact.buddies.length - 2
-      other = 'other' if extra == 1
-      title = @props.contact.buddies[0..1].map( (buddy) -> buddy.short_name ).join(", ") + ", and #{extra} #{other}"
-
-    panel_class = 'panel'
-    c_size = Math.ceil 12 / @props.contact.buddies.length
-    avatar_column = 'small-#{c_size}'
-    div className: 'small-12 columns',
-      input type: 'radio', name: 'selectedAccount', className: 'hide', ref: 'selected'
-      div className: panel_class, ref: 'panel',
-        div className: 'row',
-          div className: 'small-2 columns',
-            img src: @props.contact.buddies[0].avatar, alt: 'profile picture'
-          div className: 'small-8 columns',
-            div className: 'row',
-              div className: 'small-12 columns',
-                h3 {}, title
-              div className: 'small-12 columns',
-                span {}, "Last message dd-mm-yyyy"
-              div className: 'small-12 columns',
-                span {}, @props.contact.account.protocol[0] + " / #{@props.contact.account.alias}"
-          div className: 'small-2 columns',
-            br {}
-            div className: 'right',
-              input type: 'checkbox'
-
-Contacts = React.createClass
+ContactItem = React.createClass
   getInitialState: ->
-    buddy_names = [
-      { name: "Alex Barry", short_name: "Alex", username: "alex@mrbarry.com", avatar: "http://placehold.it/128x128" }
-      { name: "Bob Belcher", short_name: "Bob", username: "bob@mrbarry.com", avatar: "http://placehold.it/128x128" }
-      { name: "Hank Hill", short_name: "Hank", username: "hank@mrbarry.com", avatar: "http://placehold.it/128x128" }
-      { name: "Peter Parker", short_name: "Peter", username: "peter@mrbarry.com", avatar: "http://placehold.it/128x128" }
-      { name: "Churck Norris", short_name: "Chuck", username: "chuck@mrbarry.com", avatar: "http://placehold.it/128x128" }
-      { name: "Eric Cartman", short_name: "Eric", username: "eric@mrbarry.com", avatar: "http://placehold.it/128x128" }
-    ]
-    buddy_lists = [
-      { alias: "Personal", username: "alex+personal@mrbarry.com", protocol: ["Google Hangouts", "Jabber"] }
-      { alias: "Work", username: "alex+work@mrbarry.com", protocol: ["Google Hangouts", "Jabber"] }
-    ]
-    contacts = []
-    for i in [0..4]
-      conversation = { buddies: [], account: null }
-      participants = Math.floor Math.random() * buddy_names.length
-      for j in [0..participants]
-        conversation.buddies.push buddy_names[ Math.floor Math.random() * buddy_names.length ]
-      conversation.account = buddy_lists[ Math.floor Math.random() * buddy_lists.length ]
-      contacts.push conversation
-    { contacts: contacts }
+    hexValues = '0123456789ABCDEF'.split('')
+    color = '#'
+    [0..5].map (i) ->
+      color += hexValues[ Math.floor( Math.random() * hexValues.length ) ]
+    { color: color, footerDisplay: 'none' }
 
-  newMessage: ->
-    window.open "chat.html", { width: 800, height: 600, frame: true, toolbar: false }
+  toggleFooter: ->
+    @setState footerDisplay: if @state.footerDisplay == 'block' then 'none' else 'block'
 
   render: ->
-    div className: 'row with_button main_list',
-      ConversationSearch()
-      @state.contacts.map (contact, idx) ->
-        ContactDisplay key: idx, contact: contact
-      button className: 'button action primary text-centered', onClick: @newMessage,
-        span className: 'fa fa-plus'
-        " New Message"
+    div className: 'card',
+      div className: 'card-content', style: { background: @state.color }, onClick: @toggleFooter,
+        #img src: 'http://placehold.it/512x128', alt: 'account-cover-image'
+        span className: 'card-title', @props.contact.username
+        p {}, @props.contact.status
+        p {}, @props.contact.account.protocol
+      div className: 'card-footer', style: { display: @state.footerDisplay },
+        p {},
+          div className: 'row',
+            div className: 's6 col',
+              button className: 'waves-effect waves-light btn', 'Edit'
+            div className: 's6 col', style: { 'text-align': 'right' },
+              input type: 'checkbox', id: "contact-#{@props.contact.guid}-enabled"
+              label htmlFor: "contact-#{@props.contact.guid}-enabled", 'Enable Account'
 
-window.HummingbeardContacts = Contacts
+
+ContactsSearch = React.createClass
+  displayOptions: (e) ->
+    e.preventDefault()
+    container = @refs.moreOptions.getDOMNode()
+    container.style.display = if container.style.display == 'none' then 'block' else 'none'
+
+  render: ->
+    return div className: 's12 cols',
+      div className: 'card z-depth-2',
+        div className: 'card-content',
+          span className: 'card-title black-text', 'Find Contact'
+          p {}, #'Main search box goes here'
+            input type: 'text', placeholder: 'Search Conversations', ref: 'input'
+            div style: { display: 'none' }, ref: 'moreOptions',
+              input id: 'show_online_only', type: 'checkbox'
+              label htmlFor: 'show_online_only', "Show online accounts only"
+              br {}
+              input id: 'hide_archived', type: 'checkbox'
+              label htmlFor: 'hide_archived', "Hide archived conversations"
+
+        div className: 'card-action',
+          a href: '', onClick: @displayOptions, ref: 'displayOptions', 'More options...'
+
+ContactsBox = React.createClass
+  render: ->
+    div className: 'row',
+      div className: 's12 col',
+        ContactsSearch {}
+      div className: 's12 col',
+        [0..5].map (i) ->
+          ContactItem key: i, contact: { guid: "0000-ABCD-000#{i}", username: 'alex.barry@gmail.com', status: 'Online', account: { protocol: 'Google Hangouts' } }
+      div className: 's12 col', style: { 'text-align': 'center', 'font-size': '1.5em' },
+        a href: '', className: 'btn-floating', title: 'Add Account',
+          i className: 'mdi-social-person-add'
+
+window.HummingbeardContacts = ContactsBox

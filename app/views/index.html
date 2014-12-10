@@ -40,7 +40,11 @@
         return wnd
       }
       $(document).ready(function(){
-     });
+        $(".dropdown").dropdown({
+          hover: true,
+          orientation_x: 'right'
+        });
+      });
     </script>
 
    </head>
@@ -48,112 +52,27 @@
 
     <div class="row">
 
-      <div class="col s12">
-        <ul class="tabs z-depth-1">
-          <li class="tab col s4"><a href="#conversations">Conversations</a></li>
-          <li class="tab col s3"><a href="#accounts">Accounts</a></li>
-          <li class="tab col s3"><a href="#settings">Settings</a></li>
-          <li class="tab col s2"><a href="#quit" onclick="quit();">Quit</a></li>
+      <div class="col s10">
+        <ul class="tabs">
+          <li class="tab col s5"><a href="#conversations">Contacts</a></li>
+          <li class="tab col s5"><a href="#conversations">Chats</a></li>
+          <!--<li class="tab col s3"><a href="#accounts">Accounts</a></li>-->
         </ul>
       </div>
-      <div id="conversations" style="display:block;" class="col s12">
-        <div class="row">
-          <div class="col s12">
-
-            <div class="card">
-              <div class="card-content">
-                <img src="http://placehold.it/512x128">
-                <h1>Dave, Dayton, and 7 others</h1>
-                <p>Google Hangouts</p>
-              </div>
-              <div class="card-footer" style="display:none;">
-                <p>mrozbarry@pairshaped.ca</p>
-                <div class="row">
-                  <div class="col s9">
-                    <a class="waves-effect waves-light btn open" href="#" onclick="openChild('chat.html', {width: 1024, height: 768});return false;">Open</a>
-                    <a class="waves-effect waves-light btn" href="#" onclick="return false;">Archive</a>
-                  </div>
-                  <div class="col s3">
-                    <input type="checkbox" id="chat-x-notifications" />
-                    <label for="chat-x-notifications">Notifications</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <div class="row" class="margin-top: 50px;">
-          <div class="col s12" style="text-align:center;">
-            <a href="" class="btn-floating"><i class="mdi-content-add"></i></a>
-          </div>
-        </div>
+      <div class="col s2">
+        <button class="btn-flat dropdown" data-activates="other-settings"><i class="mdi-navigation-more-vert"></i></button>
+        <ul id="other-settings" class="dropdown-content">
+          <li><a href="#" onclick="return false;">Accounts</a></li>
+          <li><a href="#" onclick="return false;">Settings</a></li>
+          <li><a href="#" onclick="return false;">Console</a></li>
+          <li><a href="#" onclick="quit(); return false;">Quit</a></li>
+        </ul>
       </div>
-      <div id="accounts" class="col s12">
-        <div class="row">
+      <div class="s12 col" id="contacts" style="display:block;"></div>
 
-          <div class="col s12">
-            <div class="card">
-              <div class="card-content">
-                <img src="http://placehold.it/512x128">
-                <h1>alex.barry@gmail.com</h1>
-                <p>Google Hangouts</p>
-              </div>
-              <div class="card-footer" style="display:none;">
-                <p>Status: <span>offline</span></p>
-                <div class="row">
-                  <div class="col s6">
-                    <a class="waves-effect waves-light btn" href="#">Edit</a>
-                  </div>
-                  <div class="col s6" style="text-align: right;">
-                    <input type="checkbox" id="account-1-enable" />
-                    <label for="account-1-enable">Enable Account</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col s12">
-            <div class="card">
-              <div class="card-content">
-                <img src="http://placehold.it/512x128">
-                <h1>mrozbarry@pairshaped.ca</h1>
-                <p>Google Hangouts</p>
-              </div>
-              <div class="card-footer" style="display:none;">
-                <p>Status: <span>offline</span></p>
-                <div class="row">
-                  <div class="col s6">
-                    <a class="waves-effect waves-light btn" href="#">Edit</a>
-                  </div>
-                  <div class="col s6" style="text-align: right;">
-                    <input type="checkbox" id="account-2-enable" />
-                    <label for="account-2-enable">Enable Account</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-      <div id="settings" class="col s12">
-        <a href="#" class="btn" onclick="openDevTools();return false;">Dev Tools</a>
-      </div>
+      <div id="conversations"></div>
 
     </div>
 
-
-    <!--<div class="fixed custom-nav clearfix">
-      <ul class="button-group left" id="mainNav">
-        <li><a class="button tiny primary" href="#contacts">Contacts</a></li>
-        <li><a class="button tiny secondary" href="#accounts">Accounts</a></li>
-        <li><a class="button tiny secondary" href="#settings">Settings</a></li>
-      </ul>
-      <a class="button tiny right alert" id="quit" href="#quit">Quit</a>
-    </div>
-    <div id="body"></div>-->
   </body>
 </html>
