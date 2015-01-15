@@ -52,25 +52,15 @@
 
     <div class="row">
 
-      <div class="col s10">
+      <div class="col s12 z-depth-1">
         <ul class="tabs">
-          <li class="tab col s5"><a href="#conversations">Contacts</a></li>
+          <li class="tab col s5"><a href="#contacts">Contacts</a></li>
           <li class="tab col s5"><a href="#conversations">Chats</a></li>
-          <!--<li class="tab col s3"><a href="#accounts">Accounts</a></li>-->
+          <li class="col s2" style="float:left; padding:0; text-align: center;"><a href="#config">Config</a></li>
         </ul>
       </div>
-      <div class="col s2">
-        <button class="btn-flat dropdown" data-activates="other-settings"><i class="mdi-navigation-more-vert"></i></button>
-        <ul id="other-settings" class="dropdown-content">
-          <li><a href="#" onclick="return false;">Accounts</a></li>
-          <li><a href="#" onclick="return false;">Settings</a></li>
-          <li><a href="#" onclick="return false;">Console</a></li>
-          <li><a href="#" onclick="quit(); return false;">Quit</a></li>
-        </ul>
-      </div>
-      <div class="s12 col" id="contacts" style="display:block;"></div>
-
-      <div id="conversations"></div>
+      <div class="s12 col content" id="contacts"></div>
+      <div class="s12 col content" id="conversations" style="display:none;"></div>
 
     </div>
 

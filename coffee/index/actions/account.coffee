@@ -2,16 +2,13 @@
 window.HummingbeardActions = window.HummingbeardActions || {}
 
 window.HummingbeardActions.Account = Reflux.createActions [
-  # Reflects online/busy/away/offline
+  # Account state (on/off)
   'stateChange'
-  # Changing your display name, or status text (ie reason for being away)
-  'statusChange'
-  # Sub-data from stateChange
+  # Account authentication
   'login'
   'logout'
-  # Contact state change
-  'contactStateChange'
-  'contactStatusChange'
+  # Reflects online/busy/away/offline
+  'statusChange'
 ]
 
 

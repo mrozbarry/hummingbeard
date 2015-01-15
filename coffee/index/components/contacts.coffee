@@ -22,45 +22,24 @@ ContactItem = React.createClass
       div className: 'card-footer', style: { display: @state.footerDisplay },
         p {},
           div className: 'row',
-            div className: 's6 col',
+            div className: 's8 col',
               button className: 'waves-effect waves-light btn', 'Edit'
-            div className: 's6 col', style: { 'text-align': 'right' },
+            div className: 's4 col',
               input type: 'checkbox', id: "contact-#{@props.contact.guid}-enabled"
-              label htmlFor: "contact-#{@props.contact.guid}-enabled", 'Enable Account'
-
-
-ContactsSearch = React.createClass
-  displayOptions: (e) ->
-    e.preventDefault()
-    container = @refs.moreOptions.getDOMNode()
-    container.style.display = if container.style.display == 'none' then 'block' else 'none'
-
-  render: ->
-    return div className: 's12 cols',
-      div className: 'card z-depth-2',
-        div className: 'card-content',
-          span className: 'card-title black-text', 'Find Contact'
-          p {}, #'Main search box goes here'
-            input type: 'text', placeholder: 'Search Conversations', ref: 'input'
-            div style: { display: 'none' }, ref: 'moreOptions',
-              input id: 'show_online_only', type: 'checkbox'
-              label htmlFor: 'show_online_only', "Show online accounts only"
+              label htmlFor: "contact-#{@props.contact.guid}-enabled", 'Enabled'
               br {}
-              input id: 'hide_archived', type: 'checkbox'
-              label htmlFor: 'hide_archived', "Hide archived conversations"
+              input type: 'checkbox', id: "contact-#{@props.contact.guid}-notifications"
+              label htmlFor: "contact-#{@props.contact.guid}-notifications", 'Notifications'
 
-        div className: 'card-action',
-          a href: '', onClick: @displayOptions, ref: 'displayOptions', 'More options...'
 
 ContactsBox = React.createClass
   render: ->
     div className: 'row',
       div className: 's12 col',
-        ContactsSearch {}
-      div className: 's12 col',
         [0..5].map (i) ->
           ContactItem key: i, contact: { guid: "0000-ABCD-000#{i}", username: 'alex.barry@gmail.com', status: 'Online', account: { protocol: 'Google Hangouts' } }
       div className: 's12 col', style: { 'text-align': 'center', 'font-size': '1.5em' },
+        br {}
         a href: '', className: 'btn-floating', title: 'Add Account',
           i className: 'mdi-social-person-add'
 
